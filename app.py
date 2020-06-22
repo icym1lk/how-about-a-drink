@@ -15,3 +15,10 @@ def homepage():
     """Show homepage."""
 
     return render_template("index.html")
+
+@app.route("/results")
+def search_results():
+    """Render search results."""
+    query = request.args['query']
+
+    return render_template("results.html")
