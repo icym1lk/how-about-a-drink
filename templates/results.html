@@ -2,4 +2,24 @@
 {% block title %}Results{% endblock %}
 {% block content %}
   <h1>Results</h1>
+  <p>
+      {% for drink in data['drinks'] %}
+      <ol>
+          <li>{{ drink.strDrink}}</li>
+          <ul>
+            <li>Category: {{ drink.strCategory}}</li>
+            <li>IBA: {{ drink.strIBA}}</li>
+            <li>Alcoholic: 
+                {% if drink.strAlcoholic == 'Alcoholic' %}
+                Yes
+                {% else %}
+                No
+                {% endif %}
+            </li>
+            <li>Glassware: {{ drink.strGlass}}</li>
+            <li>Instructions: {{ drink.strInstructions}}</li>
+          </ul>
+      </ol>
+      {% endfor %}
+  </p>
 {% endblock %}

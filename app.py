@@ -20,5 +20,11 @@ def homepage():
 def search_results():
     """Render search results."""
     query = request.args['query']
+    res = requests.get(f'https://www.thecocktaildb.com/api/json/v1/1/search.php?',
+                                params = {'f': query})
+    data = res.json()
+    # import pdb
+    # pdb.set_trace()
+    print(data)
 
-    return render_template("results.html")
+    return render_template("results.html", data=data)
