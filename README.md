@@ -1,6 +1,6 @@
 ## Project Proposal
 
-### I Need A Drink Search App
+### How About A Drink Search App
 
 **Goal**
 The goal of this project is to provide a user friendly application that allows users to search for and save cocktail recipes. And maybe have a couple along the way.
