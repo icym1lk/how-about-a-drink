@@ -9,3 +9,9 @@ app = Flask(__name__)
 
 # connect to db
 connect_db(app)
+
+@app.route("/")
+def homepage():
+    """Show homepage."""
+
+    return render_template("index.html")
