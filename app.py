@@ -28,13 +28,17 @@ def search_results():
     if form.validate_on_submit():
         query_type = form.query_type.data
         query = form.query.data
-        # print(f"{query_type}*********{query}")
+        print(f"{query_type}*********{query}")
         res = requests.get(f'https://www.thecocktaildb.com/api/json/v1/1/search.php?',
                                     params = {query_type: query})
         data = res.json()
         # import pdb
         # pdb.set_trace()
         # print(f"#########################################{data}")
+
+        if query == "":
+            flash("Please enter a value to search.")
+            return redirect("/")
 
         if query_type == 'i':
             if data['ingredients'] == None:
@@ -47,6 +51,6 @@ def search_results():
                 flash("No results found.")
                 return redirect("/")
             else:
-                return render_template("results.html", fprm=form, data=data, query=query, query_type=query_type)
+                return render_template("results.html", form=form, data=data, query=query, query_type=query_type)
     else:
-        return render_template("index.html", form=form)
+        return redirect("/")
