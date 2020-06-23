@@ -1,35 +1,61 @@
 {% extends 'base.html' %}
 {% block title %}Results{% endblock %}
 {% block content %}
-  {% if query_type == 'f' %}
-  <h1>Drinks that start with an '{{ query.upper() }}'</h1>
+  {% if query_type == 's' %}
+    <h1>Cocktails</h1>
+  {% elif query_type == 'i' %}
+    <h1>Ingredients</h1>
+  {% else %}
+    <h1>Drinks that start with an '{{ query.upper() }}'</h1>
   {% endif %}
   <p>
-      {% for drink in data['drinks'] %}
-      <ul>
-          <li>{{ drink.strDrink}}</li>
+      {% if query_type == 's' or query_type == 'f' %}
+        {% for drink in data['drinks'] %}
           <ul>
-            <li>Category: {{ drink.strCategory}}</li>
-            <li>IBA: 
-                {% if drink.strIBA %}
-                {{ drink.strIBA }}
-                {% else %}
-                Not Applicable
-                {% endif %}
-            </li>
-            <li>Alcoholic: 
-                {% if drink.strAlcoholic == 'Alcoholic' %}
-                Yes
-                {% elif drink.strAlcoholic == 'Optional alcohol' %}
-                Optional
-                {% else %}
-                No
-                {% endif %}
-            </li>
-            <li>Glassware: {{ drink.strGlass}}</li>
-            <li>Instructions: {{ drink.strInstructions }}</li>
+              <li>{{ drink.strDrink}}</li>
+              <ul>
+                <li>Category: {{ drink.strCategory}}</li>
+                <li>IBA: 
+                    {% if drink.strIBA %}
+                    {{ drink.strIBA }}
+                    {% else %}
+                    Not Applicable
+                    {% endif %}
+                </li>
+                <li>Alcoholic: 
+                    {% if drink.strAlcoholic == 'Alcoholic' %}
+                    Yes
+                    {% elif drink.strAlcoholic == 'Optional alcohol' %}
+                    Optional
+                    {% else %}
+                    No
+                    {% endif %}
+                </li>
+                <li>Glassware: {{ drink.strGlass}}</li>
+                <li>Instructions: {{ drink.strInstructions }}</li>
+              </ul>
           </ul>
-      </ul>
-      {% endfor %}
+        {% endfor %}
+      {% else %}
+        {% for ingredient in data['ingredients'] %}
+          <ul>
+              <li>{{ ingredient.strIngredient}}</li>
+              <ul>
+                <li>Type: {{ ingredient.strType}}</li>
+                <li>Alcohol: 
+                    {% if ingredient.strAlcohol %}
+                    Yes
+                    {% else %}
+                    No
+                    {% endif %}
+                </li>
+                {% if ingredient.strAlcohol %}
+                <li>ABV: {{ ingredient.strABV}}</li>
+                {% endif %}
+                <li>Description: {{ ingredient.strDescription }}</li>
+              </ul>
+          </ul>
+        {% endfor %}
+      {% endif %}
   </p>
 {% endblock %}
