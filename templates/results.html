@@ -1,18 +1,14 @@
 {% extends 'base.html' %}
 {% block title %}Results{% endblock %}
 {% block content %}
-  {% if query_type == 's' %}
-    <h1>Cocktails</h1>
-  {% elif query_type == 'i' %}
-    <h1>Ingredients</h1>
-  {% else %}
+  {% if query_type == 'f' %}
     <h1>Drinks that start with an '{{ query.upper() }}'</h1>
   {% endif %}
   <p>
       {% if query_type == 's' or query_type == 'f' %}
         {% for drink in data['drinks'] %}
           <ul>
-              <li>{{ drink.strDrink}}</li>
+              <h3>{{ drink.strDrink}}</h3>
               <ul>
                 <li>Category: {{ drink.strCategory}}</li>
                 <li>IBA: 
@@ -39,7 +35,7 @@
       {% else %}
         {% for ingredient in data['ingredients'] %}
           <ul>
-              <li>{{ ingredient.strIngredient}}</li>
+              <h3>{{ ingredient.strIngredient}}</h3>
               <ul>
                 <li>Type: {{ ingredient.strType}}</li>
                 <li>Alcohol: 
