@@ -10,6 +10,8 @@ app = Flask(__name__)
 # connect to db
 connect_db(app)
 
+app.config["SECRET_KEY"] = "secret"
+
 @app.route("/")
 def homepage():
     """Show homepage."""
@@ -27,6 +29,17 @@ def search_results():
     data = res.json()
     # import pdb
     # pdb.set_trace()
-    # print(data)
+    # print(f"#########################################{data}")
 
-    return render_template("results.html", data=data, query=query, query_type=query_type)
+    if query_type == 'i':
+        if data['ingredients'] == None:
+            flash("No results found.")
+            return redirect("/")
+        else:
+            return render_template("results.html", data=data, query=query, query_type=query_type)
+    else:
+        if data['drinks'] == None:
+            flash("No results found.")
+            return redirect("/")
+        else:
+            return render_template("results.html", data=data, query=query, query_type=query_type)
