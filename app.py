@@ -13,6 +13,7 @@ app = Flask(__name__)
 connect_db(app)
 
 app.config["SECRET_KEY"] = "secret"
+alphabet = ['abcdefghijklmnopqrstuvwxyz']
 
 @app.route("/")
 def homepage():
@@ -28,18 +29,19 @@ def search_results():
     if form.validate_on_submit():
         query_type = form.query_type.data
         query = form.query.data
-        print(f"{query_type}*********{query}")
+        # print(f"{query_type}*********{query}")
+
+        if query_type == 'f':
+            if len(query) > 1:
+                flash("Please select 1 letter or 1 number for that search type.")
+                return redirect("/")
+
         res = requests.get(f'https://www.thecocktaildb.com/api/json/v1/1/search.php?',
                                     params = {query_type: query})
         data = res.json()
         # import pdb
         # pdb.set_trace()
         # print(f"#########################################{data}")
-
-        if query == "":
-            flash("Please enter a value to search.")
-            return redirect("/")
-
         if query_type == 'i':
             if data['ingredients'] == None:
                 flash("No results found.")
