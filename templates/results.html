@@ -4,22 +4,33 @@
   <h1>Results</h1>
   <p>
       {% for drink in data['drinks'] %}
-      <ol>
+      <ul>
           <li>{{ drink.strDrink}}</li>
           <ul>
             <li>Category: {{ drink.strCategory}}</li>
-            <li>IBA: {{ drink.strIBA}}</li>
+            <li>IBA: 
+                {% if drink.strIBA %}
+                {{ drink.strIBA }}
+                {% else %}
+                Not Applicable
+                {% endif %}
+            </li>
             <li>Alcoholic: 
                 {% if drink.strAlcoholic == 'Alcoholic' %}
                 Yes
+                {% elif drink.strAlcoholic == 'Optional alcohol' %}
+                Optional
                 {% else %}
                 No
                 {% endif %}
             </li>
             <li>Glassware: {{ drink.strGlass}}</li>
-            <li>Instructions: {{ drink.strInstructions}}</li>
+            <li>Instructions: {{ drink.strInstructions }}</li>
+            {% for n in range(15) %}
+            {{ drink.strIngredient }}
+            {% endfor %}
           </ul>
-      </ol>
+      </ul>
       {% endfor %}
   </p>
 {% endblock %}
