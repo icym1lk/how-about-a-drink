@@ -21,11 +21,12 @@ def search_results():
     """Render search results."""
     query_type = request.form['query_type']
     query = request.form['query']
+    
     res = requests.get(f'https://www.thecocktaildb.com/api/json/v1/1/search.php?',
                                 params = {query_type: query})
     data = res.json()
     # import pdb
     # pdb.set_trace()
-    print(data)
+    # print(data)
 
-    return render_template("results.html", data=data)
+    return render_template("results.html", data=data, query=query, query_type=query_type)

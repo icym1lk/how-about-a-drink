@@ -1,7 +1,9 @@
 {% extends 'base.html' %}
 {% block title %}Results{% endblock %}
 {% block content %}
-  <h1>Results</h1>
+  {% if query_type == 'f' %}
+  <h1>Drinks that start with an '{{ query.upper() }}'</h1>
+  {% endif %}
   <p>
       {% for drink in data['drinks'] %}
       <ul>
@@ -26,9 +28,6 @@
             </li>
             <li>Glassware: {{ drink.strGlass}}</li>
             <li>Instructions: {{ drink.strInstructions }}</li>
-            {% for n in range(15) %}
-            {{ drink.strIngredient }}
-            {% endfor %}
           </ul>
       </ul>
       {% endfor %}
