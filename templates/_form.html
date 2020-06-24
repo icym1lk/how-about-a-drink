@@ -4,7 +4,7 @@
     <div class="input-group mb-3">
       <div class="input-group-prepend">
         <select name="query_type" class="custom-select">
-          <option selected>Choose One</option>
+          <option selected>Search By</option>
           {% for field in form.query_type if field.widget.input_type != 'hidden'%}
                 {{ field }}
                 <span>
