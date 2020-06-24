@@ -35,24 +35,27 @@ def search_results():
             if len(query) > 1:
                 flash("Please select 1 letter or 1 number for that search type.")
                 return redirect("/")
-
-        res = requests.get(f'https://www.thecocktaildb.com/api/json/v1/1/search.php?',
-                                    params = {query_type: query})
+        if query_type == 'i':
+            res = requests.get(f'https://www.thecocktaildb.com/api/json/v1/1/filter.php?',
+                                params = {query_type: query})
+        else:
+            res = requests.get(f'https://www.thecocktaildb.com/api/json/v1/1/search.php?',
+                                params = {query_type: query})
         data = res.json()
         # import pdb
         # pdb.set_trace()
         # print(f"#########################################{data}")
-        if query_type == 'i':
-            if data['ingredients'] == None:
-                flash("No results found.")
-                return redirect("/")
-            else:
-                return render_template("results.html", form=form, data=data, query=query, query_type=query_type)
+        # if query_type == 'i':
+        #     if data['ingredients'] == None:
+        #         flash("No results found.")
+        #         return redirect("/")
+        #     else:
+        #         return render_template("results.html", form=form, data=data, query=query, query_type=query_type)
+        # else:
+        if data['drinks'] == None:
+            flash("No results found.")
+            return redirect("/")
         else:
-            if data['drinks'] == None:
-                flash("No results found.")
-                return redirect("/")
-            else:
-                return render_template("results.html", form=form, data=data, query=query, query_type=query_type)
+            return render_template("results.html", form=form, data=data, query=query, query_type=query_type)
     else:
         return redirect("/")
