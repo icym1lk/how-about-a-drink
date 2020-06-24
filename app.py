@@ -38,9 +38,16 @@ def search_results():
         if query_type == 'i':
             res = requests.get(f'https://www.thecocktaildb.com/api/json/v1/1/filter.php?',
                                 params = {query_type: query})
+            # print(f"**********************{res}")
+            # import pdb
+            # pdb.set_trace()
         else:
             res = requests.get(f'https://www.thecocktaildb.com/api/json/v1/1/search.php?',
                                 params = {query_type: query})
+        if res.text == '':
+            flash("No results found.")
+            return redirect("/")
+
         data = res.json()
         # import pdb
         # pdb.set_trace()
@@ -68,6 +75,6 @@ def random_cocktail():
     
     res = requests.get('https://www.thecocktaildb.com/api/json/v1/1/random.php')
     data = res.json()
-    print(data)
+    # print(data)
 
     return render_template("results.html", form=form, data=data)
