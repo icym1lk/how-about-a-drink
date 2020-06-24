@@ -13,7 +13,6 @@ app = Flask(__name__)
 connect_db(app)
 
 app.config["SECRET_KEY"] = "secret"
-alphabet = ['abcdefghijklmnopqrstuvwxyz']
 
 @app.route("/")
 def homepage():

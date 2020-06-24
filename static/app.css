@@ -1,0 +1,14 @@
+img {
+	height: 150px;
+	width: 150px;
+}
+#drink-container {
+	display: inline-flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: space-around;
+	align-content: space-around;
+}
+#drink-container > .drink-item {
+	flex: auto;
+}
