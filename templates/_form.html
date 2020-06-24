@@ -10,7 +10,7 @@
                 <span>
                     {% if field.errors %}
                         {% for error in field.errors %}
-                            <b class="text-danger">{{ error }}</b>
+                            <span class="text-danger">{{ error }}</span>
                         {% endfor %}
                     {% endif %}
                 </span>
@@ -18,7 +18,7 @@
           {% endfor %}
         </select>
       </div>
-      <input type="text" name="query" id="query" class="form-control" placeholder="Margarita" aria-label="Text input with select list">
+      <input type="text" name="query" id="query" class="form-control" placeholder="e.g. Margarita" aria-label="Text input with select list">
       <div class="input-group-append">
         <button class="btn btn-primary" formaction="/results" formmethod="POST" aria-haspopup="true" aria-expanded="false">Go!</button>
       </div>

@@ -33,7 +33,7 @@ def search_results():
 
         if query_type == 'f':
             if len(query) > 1:
-                flash("Please select 1 letter or 1 number for that search type.")
+                flash("Please select 1 letter or 1 number for that search type.", "danger")
                 return redirect("/")
         if query_type == 'i':
             res = requests.get(f'https://www.thecocktaildb.com/api/json/v1/1/filter.php?',
@@ -45,22 +45,15 @@ def search_results():
             res = requests.get(f'https://www.thecocktaildb.com/api/json/v1/1/search.php?',
                                 params = {query_type: query})
         if res.text == '':
-            flash("No results found.")
+            flash("No results found.", "info")
             return redirect("/")
 
         data = res.json()
         # import pdb
         # pdb.set_trace()
         # print(f"#########################################{data}")
-        # if query_type == 'i':
-        #     if data['ingredients'] == None:
-        #         flash("No results found.")
-        #         return redirect("/")
-        #     else:
-        #         return render_template("results.html", form=form, data=data, query=query, query_type=query_type)
-        # else:
         if data['drinks'] == None:
-            flash("No results found.")
+            flash("No results found.", "info")
             return redirect("/")
         else:
             return render_template("results.html", form=form, data=data, query=query, query_type=query_type)
