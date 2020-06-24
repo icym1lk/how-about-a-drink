@@ -6,4 +6,4 @@ class SearchAPIForm(FlaskForm):
     """Form for searching API."""
 
     query = StringField("Query", validators=[InputRequired()])
-    query_type = SelectField("Query Type", choices=[("s", "Cocktail"), ("i", "Cocktail Ingredient"), ("f", "By Letter")])
+    query_type = SelectField("Query Type", choices=[("s", "Cocktail"), ("i", "Ingredient"), ("f", "By Letter")])

@@ -1,9 +1,6 @@
 {% extends 'base.html' %}
 {% block title %}Results{% endblock %}
 {% block content %}
-  {% if query_type == 'f' %}
-    <h1>Drinks that start with a(n) '{{ query.upper() }}'</h1>
-  {% endif %}
   <p>
       {% if query_type == 's' or query_type == 'f' %}
         {% for drink in data['drinks'] %}
