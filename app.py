@@ -59,3 +59,15 @@ def search_results():
             return render_template("results.html", form=form, data=data, query=query, query_type=query_type)
     else:
         return redirect("/")
+
+@app.route("/random", methods=["GET", "POST"])
+def random_cocktail():
+    """Render random cocktail results."""
+
+    form = SearchAPIForm()
+    
+    res = requests.get('https://www.thecocktaildb.com/api/json/v1/1/random.php')
+    data = res.json()
+    print(data)
+
+    return render_template("results.html", form=form, data=data)

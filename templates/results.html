@@ -2,7 +2,13 @@
 {% block title %}Results{% endblock %}
 {% block content %}
   <p>
-      {% if query_type == 's' or query_type == 'f' %}
+      {% if query_type == 'i' %}
+        {% for drink in data['drinks'] %}
+            <ul>
+                <h3>{{ drink.strDrink}}</h3>
+            </ul>
+        {% endfor %}
+      {% else %}
         {% for drink in data['drinks'] %}
           <ul>
               <h3>{{ drink.strDrink}}</h3>
@@ -27,12 +33,6 @@
                 <li>Glassware: {{ drink.strGlass}}</li>
                 <li>Instructions: {{ drink.strInstructions }}</li>
               </ul>
-          </ul>
-        {% endfor %}
-      {% else %}
-        {% for drink in data['drinks'] %}
-          <ul>
-              <h3>{{ drink.strDrink}}</h3>
           </ul>
         {% endfor %}
       {% endif %}
