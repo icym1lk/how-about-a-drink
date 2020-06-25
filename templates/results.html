@@ -6,7 +6,7 @@
   {% for drink in data['drinks'] %}
     <span class="drink-item">
       <div class="card" style="width: 15rem;">
-        <img id="drink-image" src="{{drink.strDrinkThumb}}" data-drink-id="{{drink.idDrink}}" class="card-img-top" alt="{{drink.strDrink}} image">
+        <img id="drink-image" src="{{drink.strDrinkThumb}}" data-drink-id="{{drink.idDrink}}" class="card-img-top" data-toggle="modal" data-target="#exampleModal" alt="{{drink.strDrink}} image">
         <div class="card-body">
           <h4 class="drink-title"><a href="" title="Link to just this drink">{{ drink.strDrink }}</a></h4>
         </div>

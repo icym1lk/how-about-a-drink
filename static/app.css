@@ -9,3 +9,6 @@
 	flex: auto;
 	padding-bottom: 1rem;
 }
+img {
+	cursor: pointer;
+}
