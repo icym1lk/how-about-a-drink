@@ -4,7 +4,7 @@
   <span class="input-group">
     <span id="search-bar" class="input-group-prepend">
       <select id="query_type" name="query_type" class="custom-select">
-        <option data-name="Test" disabled selected>Search By</option>
+        <option data-name="Test" disabled selected>Search Type</option>
         {% for field in form.query_type if field.widget.input_type != 'hidden'%}
           {% if field.data == 's' %}
             {{ field( **{'data-name': 'e.g. Margarita'} ) }}
@@ -23,7 +23,7 @@
         {% endfor %}
       </select>
     </span>
-    <input type="text" id="query" name="query" class="form-control" aria-label="Text input with select list">
+    <input type="text" id="query" name="query" class="form-control" placeholder="Select search type" aria-label="Text input with select list">
     <span class="input-group-append">
       <button class="btn btn-primary" formaction="/results" formmethod="POST" aria-haspopup="true" aria-expanded="false">Go!</button>
     </span>
