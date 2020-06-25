@@ -1,78 +1,96 @@
-const $body = $('body');
-const $drinkImage = $('#drink-image');
+$(async function() {
+	// cache some selectors
+	const $body = $('body');
 
-$('#query_type').change(function() {
-	$('#query').attr('placeholder', $(this).find(':selected').data('name'));
-});
+	// change search bar placeholder text depending on dropdown selection
+	$('#query_type').change(function() {
+		$('#query').attr('placeholder', $(this).find(':selected').data('name'));
+	});
 
-$drinkImage.on('click', function(e) {
-	let $drinkID = $(this).data('drink-id');
-	callAPI($drinkID);
-});
+	// get drinkID from data attr on imgs
+	$body.on('click', '#drink-image', function(e) {
+		// console.log(e.target);
+		let $drinkID = $(this).data('drink-id');
+		// console.log($drinkID);
+		callAPI($drinkID);
+	});
 
-// deal with successful response from our lucky-num API
-function handleResponseSuccess(resp) {
-	// console.log(resp);
-	let name = resp[0].strDrink;
-	let category = resp[0].strCategory;
-	let IBA = resp[0].strIBA ? resp[0].strIBA : 'Not Applicable';
-	let alcohol = resp[0].strAlcoholic;
+	$('#drink-modal').on('hidden.bs.modal', function(e) {
+		location.reload();
+		$('#drink-modal').show();
+	});
 
-	if (alcohol === 'Alcoholic') {
-		alcohol = 'Yes';
-	} else if (alcohol === 'Optional Alcohol') {
-		alcohol = 'Optional Alcohol';
-	} else {
-		alcohol = 'No';
+	// deal with successful response from our lucky-num API
+	function filterAPIResData(res) {
+		// console.log(resp);
+		const name = res[0].strDrink;
+		const category = res[0].strCategory;
+		const IBA = res[0].strIBA ? res[0].strIBA : 'No Designation';
+		let alcohol = res[0].strAlcoholic;
+		const instructions = res[0].strInstructions;
+
+		if (alcohol === 'Alcoholic') {
+			alcohol = 'Yes';
+		} else if (alcohol === 'Optional Alcohol') {
+			alcohol = 'Optional Alcohol';
+		} else {
+			alcohol = 'No';
+		}
+		// console.log(name, category, IBA, alcohol);
+		createDrinkModal(name, category, IBA, alcohol, instructions);
 	}
 
-	$body.append(`
-		<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  			<div class="modal-dialog">
-    			<div class="modal-content">
-      				<div class="modal-header">
-        				<h5 class="modal-title" id="exampleModalLabel">${name}</h5>
-        				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          					<span aria-hidden="true">&times;</span>
-        				</button>
-      				</div>
-      				<div class="modal-body">
-						<ul>
-							<li>
-								Category: ${category}
-							</li>
-							<li>
-								IBA: ${IBA}
-							</li>
-							<li>
-								Alcoholic: ${alcohol}
-							</li>
-						</ul>
-						<p>${resp[0].strInstructions}</p>
-      				</div>
-      				<div class="modal-footer">
-        				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        				<button type="button" class="btn btn-primary">Save changes</button>
-      				</div>
-    			</div>
-  			</div>
-		</div>
-	`);
-}
+	// create HTML for drink modal
+	function createDrinkModal(name, category, IBA, alcohol, instructions) {
+		const drinkInfo = `
+			<div class="modal fade" id="drink-modal" tabindex="-1" role="dialog" aria-labelledby="drinkModalLabel" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="drinkModalLabel">${name}</h5>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							<ul>
+								<li>
+									Category: ${category}
+								</li>
+								<li>
+									International Bartenders Association: ${IBA}
+								</li>
+								<li>
+									Alcoholic: ${alcohol}
+								</li>
+							</ul>
+							<p>${instructions}</p>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+							<button type="button" class="btn btn-primary">Save changes</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		`;
+		$body.append(drinkInfo);
+	}
 
-// call TheCocktailDB API to retrieve drink details based on id passed in
-async function callAPI(id) {
-	const res = await axios({
-		method: 'get',
-		url: `https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`
-	})
-		.then((res) => {
-			// console.log(res.data.drinks);
-			resp = res.data.drinks;
-			handleResponseSuccess(resp);
+	// call TheCocktailDB API to retrieve drink details based on id passed in
+	async function callAPI(id) {
+		const res = await axios({
+			method: 'get',
+			url: `https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`
 		})
-		.catch((err) => {
-			console.log(err.response);
-			// handleResponseFail(err.response.data);
-		});
-}
+			.then((res) => {
+				// console.log(res.data.drinks);
+				res = res.data.drinks;
+				filterAPIResData(res);
+			})
+			.catch((err) => {
+				console.log(err);
+				// handleResponseFail(err.response.data);
+			});
+	}
+});
