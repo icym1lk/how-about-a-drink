@@ -1,8 +1,8 @@
 {{ form.hidden_tag() }}
 
-<div class='form-group'>
-  <div class="input-group mb-3">
-    <div id="search-bar" class="input-group-prepend">
+<span class='form-group'>
+  <span class="input-group">
+    <span id="search-bar" class="input-group-prepend">
       <select id="query_type" name="query_type" class="custom-select">
         <option data-name="Test" disabled selected>Search By</option>
         {% for field in form.query_type if field.widget.input_type != 'hidden'%}
@@ -21,15 +21,17 @@
                 {% endif %}
             </span>
         {% endfor %}
-    </div>
       </select>
-  </div>
-  <input type="text" id="query" name="query" class="form-control" aria-label="Text input with select list">
-  <div class="input-group-append">
-    <button class="btn btn-primary" formaction="/results" formmethod="POST" aria-haspopup="true" aria-expanded="false">Go!</button>
-  </div>
-  <div class="input-group-append">
-    <button class="btn btn-success" formaction="/random" formmethod="POST" aria-haspopup="true" aria-expanded="false">Surprise Me!</button>
-  </div>
-</div>
+    </span>
+    <input type="text" id="query" name="query" class="form-control" aria-label="Text input with select list">
+    <span class="input-group-append">
+      <button class="btn btn-primary" formaction="/results" formmethod="POST" aria-haspopup="true" aria-expanded="false">Go!</button>
+    </span>
+    <span class="input-group-append">
+      <button class="btn btn-success" formaction="/random" formmethod="POST" aria-haspopup="true" aria-expanded="false">Surprise Me!</button>
+    </span>
+  </span>
+  
+  
+</span>
 
