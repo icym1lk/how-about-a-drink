@@ -8,7 +8,7 @@ $(async function() {
 	$('body').on('click', '#drink-image', async function(e) {
 		// console.log(e.target);
 		let $drinkID = $(this).data('drink-id');
-		console.log($drinkID);
+		// console.log($drinkID);
 		await callAPI($drinkID);
 	});
 
@@ -21,6 +21,25 @@ $(async function() {
 		const IBA = res[0].strIBA ? res[0].strIBA : 'No Designation';
 		let alcohol = res[0].strAlcoholic;
 		const instructions = res[0].strInstructions;
+		const requirements = [
+			{ [res[0].strIngredient1]: res[0].strMeasure1 },
+			{ [res[0].strIngredient2]: res[0].strMeasure2 },
+			{ [res[0].strIngredient3]: res[0].strMeasure3 },
+			{ [res[0].strIngredient4]: res[0].strMeasure4 },
+			{ [res[0].strIngredient5]: res[0].strMeasure5 },
+			{ [res[0].strIngredient6]: res[0].strMeasure6 },
+			{ [res[0].strIngredient7]: res[0].strMeasure7 },
+			{ [res[0].strIngredient8]: res[0].strMeasure8 },
+			{ [res[0].strIngredient9]: res[0].strMeasure9 },
+			{ [res[0].strIngredient10]: res[0].strMeasure10 },
+			{ [res[0].strIngredient11]: res[0].strMeasure11 },
+			{ [res[0].strIngredient12]: res[0].strMeasure12 },
+			{ [res[0].strIngredient13]: res[0].strMeasure13 },
+			{ [res[0].strIngredient14]: res[0].strMeasure14 },
+			{ [res[0].strIngredient15]: res[0].strMeasure15 }
+		];
+
+		console.log(requirements);
 
 		if (alcohol === 'Alcoholic') {
 			alcohol = 'Yes';
