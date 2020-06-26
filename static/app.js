@@ -1,29 +1,16 @@
 $(async function() {
-	// cache some selectors
-	const $body = $('body');
-
 	// change search bar placeholder text depending on dropdown selection
 	$('#query_type').change(function() {
 		$('#query').attr('placeholder', $(this).find(':selected').data('name'));
 	});
 
 	// get drinkID from data attr on imgs
-	$body.on('click', '#drink-image', function(e) {
+	$('body').on('click', '#drink-image', async function(e) {
 		// console.log(e.target);
 		let $drinkID = $(this).data('drink-id');
-		// console.log($drinkID);
-		callAPI($drinkID);
+		console.log($drinkID);
+		await callAPI($drinkID);
 	});
-
-	// $('#drink-image').on('click', function() {
-
-	// 	});
-	// });
-
-	// $('#drink-modal').on('hidden.bs.modal', function(e) {
-	// 	console.log('modal hidden');
-	// 	$('.modal-content').html('');
-	// });
 
 	// deal with successful response from our lucky-num API
 	function filterAPIResData(res) {
@@ -80,7 +67,7 @@ $(async function() {
 				</div>
 			</div>
 		`;
-		$body.append(drinkInfo);
+		$('body').append(drinkInfo);
 	}
 
 	// call TheCocktailDB API to retrieve drink details based on id passed in
