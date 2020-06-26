@@ -28,6 +28,7 @@ $(async function() {
 	// deal with successful response from our lucky-num API
 	function filterAPIResData(res) {
 		// console.log(resp);
+		const id = res[0].idDrink;
 		const name = res[0].strDrink;
 		const category = res[0].strCategory;
 		const IBA = res[0].strIBA ? res[0].strIBA : 'No Designation';
@@ -42,13 +43,13 @@ $(async function() {
 			alcohol = 'No';
 		}
 		// console.log(name, category, IBA, alcohol);
-		createDrinkModal(name, category, IBA, alcohol, instructions);
+		createDrinkModal(id, name, category, IBA, alcohol, instructions);
 	}
 
 	// create HTML for drink modal
-	function createDrinkModal(name, category, IBA, alcohol, instructions) {
+	function createDrinkModal(id, name, category, IBA, alcohol, instructions) {
 		const drinkInfo = `
-			<div class="modal fade" id="drink-modal" tabindex="-1" role="dialog" aria-labelledby="drinkModalLabel" aria-hidden="true">
+			<div class="modal fade" id="drink-modal-${id}" tabindex="-1" role="dialog" aria-labelledby="drinkModalLabel" aria-hidden="true">
 				<div class="modal-dialog modal-dialog-centered">
 					<div class="modal-content">
 						<div class="modal-header">
