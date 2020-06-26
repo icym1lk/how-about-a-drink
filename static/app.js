@@ -15,10 +15,15 @@ $(async function() {
 		callAPI($drinkID);
 	});
 
-	$('#drink-modal').on('hidden.bs.modal', function(e) {
-		location.reload();
-		$('#drink-modal').show();
-	});
+	// $('#drink-image').on('click', function() {
+
+	// 	});
+	// });
+
+	// $('#drink-modal').on('hidden.bs.modal', function(e) {
+	// 	console.log('modal hidden');
+	// 	$('.modal-content').html('');
+	// });
 
 	// deal with successful response from our lucky-num API
 	function filterAPIResData(res) {
