@@ -28,7 +28,6 @@ def search_results():
     if form.validate_on_submit():
         query_type = form.query_type.data
         query = form.query.data
-        # print(f"{query_type}*********{query}")
 
         # check if query was for letter/number.
         # These queries cannot be more than 1 character.
@@ -36,26 +35,25 @@ def search_results():
             if len(query) > 1:
                 flash("Please select 1 letter or 1 number for that search type.", "danger")
                 return redirect("/")
+        
         # check if query was for ingredient
         # ingredient API call is different end point than cocktail and letter/number
         if query_type == 'i':
             res = requests.get(f'https://www.thecocktaildb.com/api/json/v1/1/filter.php?',
                                 params = {query_type: query})
-            # print(f"**********************{res}")
-            # import pdb
-            # pdb.set_trace()
+  
         # send query for cocktail or letter/number
         else:
             res = requests.get(f'https://www.thecocktaildb.com/api/json/v1/1/search.php?',
                                 params = {query_type: query})
+        
+        # check if data was found, if no data found notify user
         if res.text == '':
             flash("No results found.", "info")
             return redirect("/")
 
         data = res.json()
-        # import pdb
-        # pdb.set_trace()
-        # print(f"#########################################{data}")
+
         # check if data was found, if no data found notify user
         if data['drinks'] == None:
             flash("No results found.", "info")
@@ -73,6 +71,5 @@ def random_cocktail():
     
     res = requests.get('https://www.thecocktaildb.com/api/json/v1/1/random.php')
     data = res.json()
-    # print(data)
 
     return render_template("results.html", form=form, data=data)

@@ -6,9 +6,7 @@ $(async function() {
 
 	// get drinkID from data attr on imgs and call API
 	$('.card').on('click', '#drink-image', function(e) {
-		// console.log(e.target);
 		let $drinkID = $(this).data('drink-id');
-		// console.log($drinkID);
 		callAPI($drinkID);
 	});
 
@@ -20,7 +18,6 @@ $(async function() {
 		})
 			// handle successful call
 			.then((res) => {
-				// console.log(res.data.drinks);
 				res = res.data.drinks;
 				filterAPIResData(res);
 			})
@@ -33,7 +30,6 @@ $(async function() {
 
 	// deal with successful response from our lucky-num API
 	function filterAPIResData(res) {
-		// console.log(resp);
 		const id = res[0].idDrink;
 		const name = res[0].strDrink;
 		const category = res[0].strCategory;
@@ -67,7 +63,6 @@ $(async function() {
 		} else {
 			alcohol = 'No';
 		}
-		// console.log(name, category, IBA, alcohol);
 		createDrinkModal(id, name, category, IBA, alcohol, instructions, ingredients);
 	}
 
