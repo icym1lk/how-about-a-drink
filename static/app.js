@@ -5,11 +5,11 @@ $(async function() {
 	});
 
 	// get drinkID from data attr on imgs
-	$('body').on('click', '#drink-image', async function(e) {
+	$('.card').on('click', '#drink-image', function(e) {
 		// console.log(e.target);
 		let $drinkID = $(this).data('drink-id');
 		// console.log($drinkID);
-		await callAPI($drinkID);
+		callAPI($drinkID);
 	});
 
 	// call TheCocktailDB API to retrieve drink details based on id passed in
@@ -70,8 +70,7 @@ $(async function() {
 	function filterIngredients(ingredients) {
 		for (let k in ingredients) {
 			if (k !== 'null') {
-				let $newLI = k + ' > ' + ingredients[k];
-				// console.log(newLI);
+				const $newLI = k + ' > ' + ingredients[k];
 				createIngredientLI($newLI);
 			}
 		}
@@ -97,7 +96,6 @@ $(async function() {
 							</button>
 						</div>
 						<div class="modal-body">
-							
 							<ul>
 								<li>
 									Category: ${category}
@@ -115,8 +113,6 @@ $(async function() {
 									</ul>
 								</li>
 							</ul>
-								
-							
 							<p>${instructions}</p>
 						</div>
 						<div class="modal-footer">
