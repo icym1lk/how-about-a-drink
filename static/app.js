@@ -4,7 +4,7 @@ $(async function() {
 		$('#query').attr('placeholder', $(this).find(':selected').data('name'));
 	});
 
-	// get drinkID from data attr on imgs
+	// get drinkID from data attr on imgs and call API
 	$('.card').on('click', '#drink-image', function(e) {
 		// console.log(e.target);
 		let $drinkID = $(this).data('drink-id');
@@ -18,11 +18,13 @@ $(async function() {
 			method: 'get',
 			url: `https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`
 		})
+			// handle successful call
 			.then((res) => {
 				// console.log(res.data.drinks);
 				res = res.data.drinks;
 				filterAPIResData(res);
 			})
+			// handle unsuccessful call
 			.catch((err) => {
 				console.log(err);
 				// handleResponseFail(err.response.data);
@@ -38,6 +40,8 @@ $(async function() {
 		const IBA = res[0].strIBA ? res[0].strIBA : 'No Designation';
 		let alcohol = res[0].strAlcoholic;
 		const instructions = res[0].strInstructions;
+		// the API lists ingredients as 15 seperate uniquely named variables.
+		// This was the easiest solution I was able to come up with to deal with that.
 		const ingredients = {
 			[res[0].strIngredient1]: res[0].strMeasure1,
 			[res[0].strIngredient2]: res[0].strMeasure2,
@@ -67,6 +71,7 @@ $(async function() {
 		createDrinkModal(id, name, category, IBA, alcohol, instructions, ingredients);
 	}
 
+	// filter out null values from ingredients list
 	function filterIngredients(ingredients) {
 		for (let k in ingredients) {
 			if (k !== 'null') {
@@ -76,6 +81,7 @@ $(async function() {
 		}
 	}
 
+	// create new LI for each ingredient and append to Modal
 	function createIngredientLI(ingredient) {
 		const $li = $(`
 			<li>${ingredient}</li>
