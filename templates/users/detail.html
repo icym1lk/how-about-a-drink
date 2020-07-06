@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="row full-width justify-content-center">
+    <h4>Hello {{ user.username }}</h4>
+</div>
+<div class="row full-width justify-content-center">
+    <ul class="navbar-nav ">
+        <div class="ml-auto">
+        {% if g.user.id == user.id %}
+        <a href="/users/profile" class="btn btn-outline-secondary">Edit Profile</a>
+        <form method="POST" action="/users/delete" class="form-inline flex-row float-right">
+            <button class="btn btn-outline-danger ml-2">Delete Profile</button>
+        </form>            
+        {% endif %}
+        </div>
+    </ul>
+</div>
+
+  {% block user_details %}
+  {% endblock %}
+
+</div>
+
+{% endblock %}

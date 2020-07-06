@@ -29,7 +29,6 @@ app.config["SECRET_KEY"] = "secret"
 ##############################################################################
 # User signup/login/logout
 
-
 @app.before_request
 def add_user_to_g():
     """If we're logged in, add curr user to Flask global."""
@@ -40,12 +39,10 @@ def add_user_to_g():
     else:
         g.user = None
 
-
 def do_login(user):
     """Log in user."""
 
     session[CURR_USER_KEY] = user.id
-
 
 def do_logout():
     """Logout user."""
@@ -53,8 +50,6 @@ def do_logout():
     if CURR_USER_KEY in session:
         del session[CURR_USER_KEY]
           
-
-
 @app.route('/signup', methods=["GET", "POST"])
 def signup():
     """Handle user signup.
@@ -89,7 +84,6 @@ def signup():
     else:
         return render_template('users/signup.html', form=form)
 
-
 @app.route('/login', methods=["GET", "POST"])
 def login():
     """Handle user login."""
@@ -109,7 +103,6 @@ def login():
 
     return render_template('users/login.html', form=form)
 
-
 @app.route('/logout')
 def logout():
     """Handle logout of user."""
@@ -119,7 +112,6 @@ def logout():
     flash(f'Goodbye {user.username}', "info")
     do_logout()
     return redirect("/")
-
 
 @app.route("/")
 def homepage():
@@ -180,3 +172,92 @@ def random_cocktail():
     data = res.json()
 
     return render_template("results.html", form=form, data=data)
+
+##############################################################################
+# General user routes:
+
+@app.route('/users/<int:user_id>')
+def users_show(user_id):
+    """Show user profile."""
+
+    user = User.query.get_or_404(user_id)
+    form = UserEditForm(obj=user)
+
+    return render_template('users/show.html', user=user, form=form)
+    
+@app.route('/users/profile', methods=["GET", "POST"])
+def profile():
+    """Update profile for current user."""
+
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    user = g.user
+    form = UserEditForm(obj=user)
+
+    if form.validate_on_submit():
+        if User.authenticate(user.username, form.password.data):
+            user.username = form.username.data
+            user.email = form.email.data
+
+            db.session.add(user)
+            db.session.commit()
+            return redirect(f"/users/{user.id}")
+
+        flash("Incorrect password entered. Please try again.", "danger")
+
+    return render_template("/users/edit.html", form=form, user=user)
+
+# Favorite a drink
+@app.route('/users/add_like/<int:message_id>', methods=["GET", "POST"])
+def add_like(message_id):
+    """Like message with current user."""
+
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    user = g.user
+    liked = [l.id for l in user.likes]
+    liked_messages = Message.query.filter(Message.id.in_(liked)).all()
+    
+    if message_id in liked:
+        like = Likes.query.filter(Likes.user_id == user.id, Likes.message_id == message_id).first()
+        db.session.delete(like)
+        db.session.commit()
+        return redirect("/")
+        
+    new_like = Likes(user_id=g.user.id, message_id=message_id)
+    db.session.add(new_like)
+    db.session.commit()
+
+    return redirect("/")
+
+@app.route('/users/<int:user_id>/likes')
+def users_likes(user_id):
+    """Show list of likes of this user."""
+
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    user = User.query.get_or_404(user_id)
+    liked = [l.id for l in user.likes]
+    liked_messages = Message.query.filter(Message.id.in_(liked)).all()
+    return render_template("/users/likes.html", user=user, liked_messages=liked_messages)
+
+@app.route('/users/delete', methods=["POST"])
+def delete_user():
+    """Delete user."""
+
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    do_logout()
+
+    db.session.delete(g.user)
+    db.session.commit()
+
+    return redirect("/signup")
