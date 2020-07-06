@@ -68,10 +68,24 @@ $(async function() {
 
 	// filter out null values from ingredients list
 	function filterIngredients(ingredients) {
+		// clear any old html
+		$('.modal-body > ul > li > ul').html('');
+		// loop through ingredients
 		for (let k in ingredients) {
+			// check if there is an ingredient
 			if (k !== 'null') {
-				const $newLI = k + ' > ' + ingredients[k];
-				createIngredientLI($newLI);
+				// check if ingredient has an actual measurement value
+				// if measurement is null set measurement to empty string
+				if (ingredients[k] === null) {
+					const $newLI = '' + ' ' + k;
+					$li = createIngredientLI($newLI);
+					$('.modal-body > ul > li > ul').append($li);
+				} else {
+					// if both ingredient and measurement present and valid
+					const $newLI = ingredients[k] + ' ' + k;
+					$li = createIngredientLI($newLI);
+					$('.modal-body > ul > li > ul').append($li);
+				}
 			}
 		}
 	}
@@ -81,7 +95,7 @@ $(async function() {
 		const $li = $(`
 			<li>${ingredient}</li>
 		`);
-		$('.modal-body > ul > li > ul').append($li);
+		return $li;
 	}
 
 	// create HTML for drink modal
@@ -109,7 +123,7 @@ $(async function() {
 								</li>
 								<li>
 									Ingredients:
-									<ul>
+									<ul id="ingredients">
 										${filterIngredients(ingredients)}
 									</ul>
 								</li>
@@ -118,7 +132,6 @@ $(async function() {
 						</div>
 						<div class="modal-footer">
 							<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-							<button type="button" class="btn btn-primary">Save changes</button>
 						</div>
 					</div>
 				</div>
