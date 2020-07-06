@@ -1,5 +1,6 @@
 import os
 import requests
+from api_funcs import callAPI
 # import Flask and any libraries you want to use
 from flask import Flask, request, jsonify, render_template, redirect, flash, session, g
 from sqlalchemy.exc import IntegrityError
@@ -107,7 +108,6 @@ def login():
 def logout():
     """Handle logout of user."""
 
-    # IMPLEMENT THIS
     user = User.query.get(session[CURR_USER_KEY])
     flash(f'Goodbye {user.username}', "info")
     do_logout()
@@ -189,7 +189,7 @@ def users_show(user_id):
     favorited = [f.id for f in user.favorites]
     favorited_drinks = Drink.query.filter(Drink.id.in_(favorited)).all()
     
-    return render_template('users/show.html', user=user, form=form, favorited_drinks=favorited_drinks)
+    return render_template('users/show.html', user=user, form=form, favorited_drinks=favorited_drinks, callAPI=callAPI)
     
 @app.route('/users/profile', methods=["GET", "POST"])
 def profile():
@@ -241,7 +241,7 @@ def add_favorite(drink_id):
     db.session.add(new_favorite)
     db.session.commit()
 
-    return redirect("/")
+    return redirect(f"/users/{user.id}")
 
 @app.route('/users/<int:user_id>/favorites')
 def users_favorites(user_id):
