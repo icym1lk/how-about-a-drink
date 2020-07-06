@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SelectField
 from wtforms.fields.html5 import EmailField
-from wtforms.validators import DataRequired, Email, Lenght, InputRequired
+from wtforms.validators import DataRequired, Email, Length, InputRequired
 import email_validator
 
 class SearchAPIForm(FlaskForm):
