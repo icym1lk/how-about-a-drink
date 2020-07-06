@@ -21,17 +21,16 @@
             </form>
 
             <ul class="navbar-nav flex-row float-right">
-                {% if session["username"] %}
-                    <li class="nav-item">
-                        <a href="/logout" class="nav-link pr-3">Logout</a>
-                    </li>
+                {% if not g.user %}
+                <li class="nav-item"><a href="/signup" class="nav-link pr-3">Sign up</a></li>
+                <li class="nav-item"><a href="/login" class="nav-link pr-3">Log in</a></li>
                 {% else %}
-                    <li class="nav-item">
-                        <a href="/login" class="nav-link pr-3">Login</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="/signup" class="nav-link">Signup</a>
-                    </li>
+                <li class="nav-item">
+                  <a href="/users/{{ g.user.id }}" class="nav-link pr-3">
+                    {{ g.user.username }}
+                  </a>
+                </li>
+                <li class="nav-item"><a href="/logout" class="nav-link pr-3">Log out</a></li>
                 {% endif %}
             </ul>
         </div>
