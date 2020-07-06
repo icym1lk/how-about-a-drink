@@ -131,6 +131,9 @@ $(async function() {
 							<p>${instructions}</p>
 						</div>
 						<div class="modal-footer">
+							<form method="POST" action="/users/favorite/${id}">
+								<button class="btn btn-primary">Favorite</button>
+							</form>
 							<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 						</div>
 					</div>

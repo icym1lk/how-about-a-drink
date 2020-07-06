@@ -4,7 +4,7 @@ import requests
 from flask import Flask, request, jsonify, render_template, redirect, flash, session, g
 from sqlalchemy.exc import IntegrityError
 # get db related stuff from models.py
-from models import db, connect_db, User, Favorite
+from models import db, connect_db, User, Favorite, Drink
 # get forms from forms.py
 from forms import SearchAPIForm, UserAddForm, UserEditForm, LoginForm
 
@@ -180,10 +180,16 @@ def random_cocktail():
 def users_show(user_id):
     """Show user profile."""
 
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
     user = User.query.get_or_404(user_id)
     form = UserEditForm(obj=user)
-
-    return render_template('users/show.html', user=user, form=form)
+    favorited = [f.id for f in user.favorites]
+    favorited_drinks = Drink.query.filter(Drink.id.in_(favorited)).all()
+    
+    return render_template('users/show.html', user=user, form=form, favorited_drinks=favorited_drinks)
     
 @app.route('/users/profile', methods=["GET", "POST"])
 def profile():
@@ -209,43 +215,46 @@ def profile():
 
     return render_template("/users/edit.html", form=form, user=user)
 
-# Favorite a drink
-@app.route('/users/add_like/<int:message_id>', methods=["GET", "POST"])
-def add_like(message_id):
-    """Like message with current user."""
+@app.route('/users/favorite/<int:drink_id>', methods=["GET", "POST"])
+def add_favorite(drink_id):
+    """Favorite drink with current user."""
 
     if not g.user:
         flash("Access unauthorized.", "danger")
         return redirect("/")
 
     user = g.user
-    liked = [l.id for l in user.likes]
-    liked_messages = Message.query.filter(Message.id.in_(liked)).all()
+    new_drink = Drink(id=drink_id)
+    db.session.add(new_drink)
+    db.session.commit()
     
-    if message_id in liked:
-        like = Likes.query.filter(Likes.user_id == user.id, Likes.message_id == message_id).first()
-        db.session.delete(like)
+    favorited = [f.id for f in user.favorites]
+    favorited_drinks = Drink.query.filter(Drink.id.in_(favorited)).all()
+    
+    if drink_id in favorited:
+        favorite = Favorite.query.filter(Favorite.user_id == user.id, Favorite.drink_id == drink_id).first()
+        db.session.delete(favorite)
         db.session.commit()
         return redirect("/")
         
-    new_like = Likes(user_id=g.user.id, message_id=message_id)
-    db.session.add(new_like)
+    new_favorite = Favorite(user_id=g.user.id, drink_id=drink_id)
+    db.session.add(new_favorite)
     db.session.commit()
 
     return redirect("/")
 
-@app.route('/users/<int:user_id>/likes')
-def users_likes(user_id):
-    """Show list of likes of this user."""
+@app.route('/users/<int:user_id>/favorites')
+def users_favorites(user_id):
+    """Show list of favorites of this user."""
 
     if not g.user:
         flash("Access unauthorized.", "danger")
         return redirect("/")
 
     user = User.query.get_or_404(user_id)
-    liked = [l.id for l in user.likes]
-    liked_messages = Message.query.filter(Message.id.in_(liked)).all()
-    return render_template("/users/likes.html", user=user, liked_messages=liked_messages)
+    favorited = [f.id for f in user.favorites]
+    favorited_drinks = Drink.query.filter(Drink.id.in_(favorited)).all()
+    return render_template("/users/likes.html", user=user, favorited_drinks=favorited_drinks)
 
 @app.route('/users/delete', methods=["POST"])
 def delete_user():
@@ -255,9 +264,11 @@ def delete_user():
         flash("Access unauthorized.", "danger")
         return redirect("/")
 
+    name = g.user.username
     do_logout()
 
     db.session.delete(g.user)
     db.session.commit()
 
+    flash(f"User {name} deleted.", "danger")
     return redirect("/signup")

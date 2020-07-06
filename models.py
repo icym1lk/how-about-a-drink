@@ -23,6 +23,7 @@ class Favorite(db.Model):
 
     drink_id = db.Column(
         db.Integer,
+        db.ForeignKey('drinks.id', ondelete='cascade'),
         unique=True
     )
 
@@ -53,10 +54,10 @@ class User(db.Model):
         nullable=False,
     )
 
-    # favorites = db.relationship(
-    #     'Drink',
-    #     secondary="favorites"
-    # )
+    favorites = db.relationship(
+        'Drink',
+        secondary="favorites"
+    )
 
     def __repr__(self):
         return f"<User #{self.id}: {self.username}, {self.email}>"
@@ -98,6 +99,16 @@ class User(db.Model):
                 return user
 
         return False
+
+class Drink(db.Model):
+    """An individual drink."""
+
+    __tablename__ = 'drinks'
+
+    id = db.Column(
+        db.Integer,
+        primary_key=True,
+    )
 
 # associate Flask app with our DB
 # don't want to connect to a db every single time you run your models file
