@@ -120,7 +120,7 @@ $(async function() {
 						<div class="modal-body">
 							<ul>
 								<li>
-									Category: ${category}
+									Drink Type: ${category}
 								</li>
 								<li>
 									International Bartenders Association: ${IBA}
