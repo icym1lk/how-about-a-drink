@@ -10,13 +10,6 @@ $(async function() {
 		callAPI($drinkID);
 	});
 
-	// // get drinkID from data attr on imgs and call API
-	// $('#favorite-form').submit(function(e) {
-	// 	let $drinkID = $(this).data('drink-id');
-	// 	console.log(`itworked ${$drinkId}`);
-	// 	// callAPI($drinkID);
-	// });
-
 	// call TheCocktailDB API to retrieve drink details based on id passed in
 	async function callAPI(id) {
 		const res = await axios({
@@ -106,7 +99,7 @@ $(async function() {
 	}
 
 	// create HTML for drink modal
-	async function createDrinkModal(id, name, category, IBA, alcohol, instructions, ingredients) {
+	function createDrinkModal(id, name, category, IBA, alcohol, instructions, ingredients) {
 		const drinkInfo = `
 			<div class="modal fade" id="drink-modal-${id}" tabindex="-1" role="dialog" aria-labelledby="drinkModalLabel" aria-hidden="true">
 				<div class="modal-dialog modal-dialog-centered">

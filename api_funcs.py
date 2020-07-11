@@ -2,6 +2,7 @@ import requests
 from forms import SearchAPIForm
 from flask import render_template
 
+
 def callAPI(id):
 
     form = SearchAPIForm()
